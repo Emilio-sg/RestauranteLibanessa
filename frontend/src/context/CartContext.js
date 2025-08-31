@@ -9,7 +9,11 @@ export const CartProvider = ({ children }) => {
     setCart(prev => {
       const found = prev.find(item => item._id === menu._id);
       if (found) {
-        return prev.map(item => item._id === menu._id ? { ...item, qty: item.qty + 1 } : item);
+        if (menu.decrease) {
+          return prev.map(item => item._id === menu._id ? { ...item, qty: item.qty - 1 } : item);
+        } else {
+          return prev.map(item => item._id === menu._id ? { ...item, qty: item.qty + 1 } : item);
+        }
       }
       return [...prev, { ...menu, qty: 1 }];
     });

@@ -2,6 +2,7 @@
 
 
 import React, { useEffect, useState, useContext } from 'react';
+import { AuthContext } from '../context/AuthContext';
 import { getMenus } from '../services/menuService';
 import { CartContext } from '../context/CartContext';
 import '../styles/libanessa.css';
@@ -13,6 +14,7 @@ const Home = () => {
 
 
   const { addToCart } = useContext(CartContext);
+  const { user } = useContext(AuthContext);
 
   useEffect(() => {
     getMenus().then(data => {
@@ -30,7 +32,8 @@ const Home = () => {
         <img src={`${process.env.PUBLIC_URL}/imagenLibanessa.jpg`} alt="Logo Libanessa" className="logo-libanessa" />
       </div>
       <div className="container mt-3">
-        <h2>Bienvenido a Restaurante Libanessa</h2>
+  <h2>Bienvenido a Restaurante Libanessa</h2>
+  {user && <p className="mb-2">¡Hola, <strong>{user.nombre}</strong>!</p>}
         <p>Elige entre nuestros menús:</p>
         {loading ? (
           <div>Cargando menús...</div>
@@ -45,7 +48,16 @@ const Home = () => {
                   <p className="card-text">{menu.detalle}</p>
                   <p className="card-text"><strong>Categoría:</strong> {menu.categoria}</p>
                   <p className="card-text"><strong>Precio:</strong> ${menu.precio}</p>
-                  <button className="btn btn-success mt-2 w-100" onClick={() => addToCart(menu)}>
+                  <button
+                    className="btn btn-success mt-2 w-100"
+                    onClick={() => {
+                      if (!user) {
+                        window.alert('Para seleccionar tienes que registrarte, si ya estás registrado inicia sesión para seleccionar.');
+                        return;
+                      }
+                      addToCart(menu);
+                    }}
+                  >
                     Agregar al carrito
                   </button>
                 </div>
