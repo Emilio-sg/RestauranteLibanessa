@@ -5,7 +5,7 @@ import '../styles/libanessa.css';
 
 
 const Navbar = () => {
-  const navigate = useNavigate();
+  /*const navigate = useNavigate();*/
   const user = JSON.parse(localStorage.getItem('user'));
 
   const handleLogout = () => {
